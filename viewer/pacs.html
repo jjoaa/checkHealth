@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>DICOM 뷰어</title>
+  <script src="../components/inject-header.js"></script>
+
+  <style>
+    #dicomImage {
+      width: 800px;
+      height: 800px;
+      border: 2px solid black;
+      margin-top: 20px;
+    }
+    .toolbar button {
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <body>
+
+
+    <h2>DICOM 파일 업로드</h2>
+    <input type="file" id="fileInput" accept=".dcm" multiple><br>
+  
+          <!-- 🛠 툴바 -->
+   <div class="toolbar">
+    <button id="zoomToolBtn">🔍 확대</button>
+    <button id="wlToolBtn">💡 밝기조절</button>
+    <button id="resetBtn">♻️ 초기화</button>
+  </div>
+
+    <div style="display: flex;">
+      <!-- 중앙 뷰어 -->
+      <div id="dicomImage" style="flex: 3;"></div>
+  
+      <!-- 오른쪽 썸네일 -->
+      <div id="thumbnailList" style="flex: 1; margin-left: 20px; overflow-y: auto; max-height: 800px; border: 1px solid #ccc; padding: 10px;">
+        <!-- <div id="thumbnailContainer" style="margin-top: 20px;"> -->
+        <h3>📂 미리보기</h3>
+      </div>
+    </div>
+  
+  
+
+  <!-- 라이브러리 (로컬) -->
+  <script src="cornerstone.min.js"></script>
+  <script src="dicomParser.min.js"></script>
+  <script src="cornerstoneWADOImageLoader.js"></script>
+
+  <!-- Cornerstone Tools (확대/밝기 도구 등) -->
+<!-- <script src="https://unpkg.com/cornerstone-tools@4.23.1/dist/cornerstoneTools.min.js"></script> -->
+
+
+  <script src="pacs.js"></script>
+</body>
+</html>
