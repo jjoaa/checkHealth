@@ -1,4 +1,3 @@
-
   let calendar; 
 
   function getEvents() {
@@ -6,7 +5,7 @@
     const customData = JSON.parse(localStorage.getItem("customDataBatch") || "[]");
 
     const events = customData.map(entry => ({
-      title: "검진: " + (entry.hospital || "직접 입력"),
+      title:  (entry.hospital || "직접 입력") + " 검진",
       start: entry.date,
       color: "#3b82f6"
     }));
@@ -25,7 +24,7 @@
     const scheduled = JSON.parse(localStorage.getItem("scheduledCheckups") || "[]");
     scheduled.forEach(event => {
       events.push({
-        title: event.title || "예정 검진일",
+        title:" 예정 : " + event.title || "예정 검진일" ,
         date: event.date,
         color: '#FFA500'
       });
