@@ -3,7 +3,12 @@
 
 ## 1. 소개
 > 국가건강검진 결과와 일반병원 검진 결과를 한눈에 볼 수 있도록 만든 사이트 입니다 \
-> 또한 웨어러블 모니터도 할 수 있으며, 영상 검사 결과도 확인할 수 있습니다.
+> 또한 웨어러블 모니터도 할 수 있으며, 영상 검사 결과도 확인할 수 있습니다.  \
+
+<br />
+
+**Live Demo (배포된 웹 사이트)**
+https://github.com/jjoaa/checkHealth
 
 <br /> <br />
 ![Image](https://github.com/user-attachments/assets/df561aac-8d5c-456e-bde3-c9df9cfab227)
