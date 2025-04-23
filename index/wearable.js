@@ -1,4 +1,4 @@
-const CLIENT_ID = '237256979865-se6ped7ni6dt4na3b8ai7h2o8ktso279.apps.googleusercontent.com';  
+const CLIENT_ID = '';  
 const redirectUri = 'http://localhost:5500/index.html';
 
 const scope = [
