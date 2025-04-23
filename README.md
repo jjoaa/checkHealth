@@ -8,7 +8,7 @@
 <br />
 
 **Live Demo (배포된 웹 사이트)**
-https://github.com/jjoaa/checkHealth
+[https://github.com/jjoaa/checkHealth](https://jjoaa.github.io/checkHealth/)
 
 <br /> <br />
 ![Image](https://github.com/user-attachments/assets/df561aac-8d5c-456e-bde3-c9df9cfab227)
