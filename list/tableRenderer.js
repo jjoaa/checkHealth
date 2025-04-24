@@ -1,21 +1,21 @@
 import { dataMap, allDates, mergeBloodPressure } from './xmlLoader.js';
-import { drawChartPopup } from './chart.js'; 
+import { drawChartPopup, drawBloodPressureChart } from './chart.js'; 
 import { 
   initUserData ,
   userEnteredLabels, 
   userEnteredCells, 
   updateLocalStorage, 
   removeFromLocalStorage, 
-  hospitalByDate, 
-  saveHospitalOnly, 
-  deleteHospitalOnly 
+  hospitalByDate, // ✅ 이거 추가!
+  saveHospitalOnly, // ✅ 병원명 저장 함수도 사용하니까 같이!
+  deleteHospitalOnly // ✅ 병원명 삭제 함수도 사용하니까 같이!
 } from './dataHandler.js';
 
 
 
 export function renderTable() {
 
-  console.log("Rendering table with dataMap:", JSON.stringify(dataMap, null, 2)); 
+  //console.log("Rendering table with dataMap:", JSON.stringify(dataMap, null, 2)); 
   const sortedDates = Array.from(allDates).sort();
 
   const categoryMap = {
@@ -80,6 +80,7 @@ sortedDates.forEach(date => {
     editBtn.onclick = () => {
       const edited = prompt(`${date} 병원명 수정`, hospital);
       if (edited !== null && edited.trim() !== "") {
+        //hospitalByDate[date] = edited.trim();
         saveHospitalOnly(date, edited.trim()); 
         renderTable();
       }
@@ -89,8 +90,9 @@ sortedDates.forEach(date => {
     deleteBtn.textContent = " ❌";
     deleteBtn.style.cursor = "pointer";
     deleteBtn.onclick = () => {
+      //delete hospitalByDate[date];
       deleteHospitalOnly(date); 
-      window.dispatchEvent(new Event("storage")); 
+      window.dispatchEvent(new Event("storage"));  //동기화
       renderTable();
     };
 
@@ -98,7 +100,7 @@ sortedDates.forEach(date => {
     th.appendChild(editBtn);
     th.appendChild(deleteBtn);
   } else if (!userEnteredCells.has(`dummy||${date}`)) {
-
+    // XML로 불러온 경우만 입력창 제공
     const input = document.createElement("input");
     input.type = "text";
     input.placeholder = "병원명 입력";
@@ -109,6 +111,7 @@ sortedDates.forEach(date => {
     saveBtn.onclick = () => {
       const val = input.value.trim();
       if (val) {
+        //hospitalByDate[date] = val;
         saveHospitalOnly(date, val); 
         renderTable();
       }
@@ -131,6 +134,7 @@ thead.appendChild(hospitalRow);
   const categories = ["계측검사", "요검사", "혈액검사", "기타"];
   categories.forEach(category => {
     const items = Object.keys(dataMap).filter(label => {
+      if (label === "SBP" || label === "DBP") return false;
       const cat = itemToCategory[label] || "기타";
       return cat === category;
     });
@@ -165,6 +169,7 @@ thead.appendChild(hospitalRow);
 
         const cellKey = `${label}||${date}`;
 
+// ✅ 혈압 셀 여부도 포함해서 버튼을 붙일 수 있는 조건 확인
 const hasUserInput =
   userEnteredCells.has(cellKey) ||
   (label === "혈압(최고/최저)" && (
@@ -196,8 +201,8 @@ if (hasUserInput) {
         updateLocalStorage("SBP", date, sbp);
         updateLocalStorage("DBP", date, dbp);
 
-        mergeBloodPressure(dataMap); 
-        renderTable(); 
+        mergeBloodPressure(dataMap); // 혈압 다시 병합
+        renderTable(); // 즉시 테이블을 갱신
       } else {
         alert("혈압은 '120/80' 형식으로 입력해주세요.");
       }
@@ -218,9 +223,9 @@ if (hasUserInput) {
   deleteBtn.textContent = " ❌";
   deleteBtn.style.cursor = "pointer";
   deleteBtn.onclick = () => {
-    console.log("사용자 입력 라벨들:", [...userEnteredLabels]);
+    //console.log("사용자 입력 라벨들:", [...userEnteredLabels]);
     if (label === "혈압(최고/최저)") {
-   
+      // SBP/DBP 직접 삭제
       delete dataMap["SBP"]?.[date];
       delete dataMap["DBP"]?.[date];
       userEnteredCells.delete(`SBP||${date}`);
@@ -228,7 +233,7 @@ if (hasUserInput) {
       removeFromLocalStorage("SBP", date);
       removeFromLocalStorage("DBP", date);
     
-   
+      // SBP/DBP 항목 자체 제거 (빈 값이면)
       if (dataMap["SBP"] && Object.keys(dataMap["SBP"]).length === 0) {
         delete dataMap["SBP"];
         userEnteredLabels.delete("SBP");
@@ -237,17 +242,19 @@ if (hasUserInput) {
         delete dataMap["DBP"];
         userEnteredLabels.delete("DBP");
       }
-   
+    
+      // 병합된 혈압 항목 제거
       if (dataMap["혈압(최고/최저)"] && dataMap["혈압(최고/최저)"][date]) {
         delete dataMap["혈압(최고/최저)"][date];
       }
     
-
+      // 혈압 병합 항목도 비었으면 완전히 제거
       if (dataMap["혈압(최고/최저)"] && Object.keys(dataMap["혈압(최고/최저)"]).length === 0) {
         delete dataMap["혈압(최고/최저)"];
         userEnteredLabels.delete("혈압(최고/최저)");
       }
     
+      // 병합 다시 수행 (중요!)
       mergeBloodPressure(dataMap);
     
     } else {
@@ -261,13 +268,15 @@ if (hasUserInput) {
         userEnteredLabels.delete(label);
       }
     
+      // 혹시 혈압 단일 항목이더라도 병합 반영
       if (label === "혈압(최고/최저)") {
         mergeBloodPressure(dataMap);
       }
     }
     
-    renderTable(); 
-
+    // UI 갱신
+    renderTable(); // ✅ 마지막으로 UI 반영
+    //console.log("사용자 입력 라벨들:", [...userEnteredLabels]);
   };
   td.appendChild(deleteBtn);
 }
@@ -278,7 +287,13 @@ if (hasUserInput) {
       const btnTd = document.createElement("td");
       const viewBtn = document.createElement("button");
       viewBtn.textContent = "보기";
-      viewBtn.onclick = () => drawChartPopup(label, sortedDates, dataMap[label]);
+      viewBtn.onclick = () => {
+        if (label === "혈압(최고/최저)") {
+          drawBloodPressureChart(); 
+        } else {
+          drawChartPopup(label, sortedDates, dataMap[label]);
+        }
+      }; 
       btnTd.appendChild(viewBtn);
       tr.appendChild(btnTd);
 
