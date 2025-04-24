@@ -1,3 +1,4 @@
+Chart.register(window['chartjs-plugin-annotation']);
 import { dataMap } from './xmlLoader.js';
 
 export function drawBloodPressureChart() {
