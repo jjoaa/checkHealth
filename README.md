@@ -1,4 +1,4 @@
-# 🩺 checkHealth 
+# 🩺 CheckHealth 
 <br />  
 
 ## 1. 소개
