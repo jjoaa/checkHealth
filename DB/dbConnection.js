@@ -1,17 +1,19 @@
 import pkg from 'mongodb';
-const { MongoClient } = pkg;
+import dotenv from 'dotenv';
 
-const url = 'mongodb+srv://jjoaa7:@cluster0.vbwhbug.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
-const dbName = 'healthData';
+dotenv.config(); // .env 파일 로드
+const { MongoClient } = pkg;
+const uri = process.env.MONGODB_URI; // ✅ 이 값이 .env에서 읽힘
+const dbName = process.env.MONGODB_DBNAME || 'healthData'; // 선택적
 
 let client = null;
 let db = null;
 
 async function connectDB() {
     if (client) return db;
-    
+
     try {
-        client = await MongoClient.connect(url);
+        client = await MongoClient.connect(uri); // ✅ 수정됨
         console.log('MongoDB connection successful');
         db = client.db(dbName);
         return db;
