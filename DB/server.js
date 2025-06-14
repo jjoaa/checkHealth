@@ -19,6 +19,7 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT;
 
+
 // Middleware
 app.use(cors());  // 브라우저의 CORS 요청 허용
 app.use(express.json());  // JSON 요청 처리
@@ -214,7 +215,7 @@ connectDB().then(() => {
     process.exit(1);
 });
 
-// 선택: 서버 종료 시 연결 닫기
+// 서버 종료 시 연결 닫기
 process.on('SIGINT', async () => {
     console.log('서버 종료 중... DB 연결 닫는 중');
     await closeConnection();
