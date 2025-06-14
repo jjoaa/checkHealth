@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>JPG & PDF 뷰어 + 입력 화면</title>
+  <script src="../components/inject-header.js"></script>
+
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      margin: 0;
+    }
+    #paneWrapper {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    #leftPane, #rightPane {
+      flex: 1;
+      padding: 20px;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+
+    #leftPane {
+      border-right: 2px solid #ccc;
+    }
+
+    #imageViewer, #pdfViewer {
+      margin-top: 20px;
+      border: 1px solid #000;
+      padding: 10px;
+      max-width: 100%;
+    }
+
+    canvas {
+      width: 100%;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 왼쪽: 이미지/PDF 뷰어 -->
+  <div id="paneWrapper">
+    <div id="leftPane">
+      <h2>JPG 또는 PDF 파일 업로드</h2>
+      <input type="file" id="fileInput" accept="image/*,application/pdf"><br><br>
+
+      <!-- JPG 이미지 영역 -->
+      <div id="imageViewer" style="display: none;">
+        <h3>JPG 이미지 보기</h3>
+        <img id="imagePreview">
+      </div>
+
+      <!-- PDF 뷰어 영역 -->
+      <div id="pdfViewer" style="display: none;">
+        <h3>PDF 문서 보기 (첫 페이지)</h3>
+        <canvas id="pdfCanvas"></canvas>
+      </div>
+    </div>
+
+    <!-- 오른쪽: input.html 포함 -->
+    <div id="rightPane">
+      <iframe src="../input/input.html"></iframe>
+    </div>
+</div>
+  <!-- PDF.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="viewer.js"></script>
+</body>
+</html>

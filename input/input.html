@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>건강검진 수동 입력</title>
+  <link rel ="stylesheet" href="./input.css">
+  <script src="../components/inject-header.js"></script>
+
+</head>
+<body>
+<div class="form-container">
+    <h2> 건강검진 입력</h2>
+
+    <label for="customDate">날짜:</label>
+    <input type="date" id="customDate"  name="customDate" class="input-full" />
+    <label for="inputHospital">병원:</label>
+    <input type="text" id="inputHospital" name="inputHospital" class="input-full"/>
+
+      <div class="row-flex">
+        <input list="itemList" id="customLabel" placeholder="항목 선택" />
+        <input type="text" id="customValue" placeholder="값 입력" />
+      </div>
+
+      <datalist id="itemList">
+        <option value="신장" />
+        <option value="체중" />
+        <option value="허리둘레" />
+        <option value="BMI" />
+        <option value="시력(좌)" />
+        <option value="시력(우)" />
+        <option value="청력(좌/우)" />
+        <option value="혈압(최고/최저)" />
+        <option value="요단백" />
+        <option value="혈색소" />
+        <option value="공복혈당" />
+        <option value="총콜레스테롤" />
+        <option value="HDL 콜레스테롤" />
+        <option value="트리글리세라이드" />
+        <option value="LDL콜레스테롤" />
+        <option value="혈청크레아티닌" />
+        <option value="신사구체여과율(GFR)" />
+        <option value="AST(SGOT)" />
+        <option value="ALT(SGPT)" />
+        <option value="감마지티피" />
+        <option value="기타" />
+      </datalist>
+
+    <div style="margin-top: 12px;">
+      <button onclick="addEntry()">추가하기</button>
+      <button onclick="submitAll()">전송하기</button>
+    </div>
+
+    <!-- 미리보기 출력 영역 -->
+    <div id="previewBox" style="margin-top: 24px;">
+      <h4> 입력 항목</h4>
+      <ul id="entryList"></ul>
+    </div>
+  </div>
+
+  <script>
+    const entries = [];
+
+    function addEntry() {
+      const label = document.getElementById("customLabel").value.trim();
+      const value = document.getElementById("customValue").value.trim();
+
+      if (!label || !value) {
+        alert("항목명과 값을 입력하세요.");
+        return;
+      }
+
+      entries.push({ label, value });
+      document.getElementById("customLabel").value = "";
+      document.getElementById("customValue").value = "";
+
+      renderEntryList();
+    }
+
+    function parseBloodPressure(value) {
+      const match = value.match(/^(\d+)\s*\/\s*(\d+)$/);
+      if (match) {
+        return {
+          SBP: parseInt(match[1], 10),
+          DBP: parseInt(match[2], 10)
+        };
+      } else {
+        return null; 
+      }
+    }
+    function renderEntryList() {
+      const ul = document.getElementById("entryList");
+      ul.innerHTML = "";
+
+      entries.forEach((item, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `${item.label} : ${item.value} 
+          <button onclick="removeEntry(${index})" style="margin-left:10px;">X</button>`;
+        ul.appendChild(li);
+      });
+    }
+
+    function removeEntry(index) {
+      entries.splice(index, 1);
+      renderEntryList();
+    }
+
+    function submitAll() {
+      const date = document.getElementById("customDate").value;
+      const hospital = document.getElementById("inputHospital").value.trim();
+
+      if (!date || !hospital || entries.length === 0) {
+        alert("날짜, 병원, 입력 항목을 모두 작성해주세요.");
+        return;
+      }
+
+      const processedEntries = entries.map(({ label, value }) => {
+      // 혈압 처리
+      if (label === "혈압(최고/최저)") {
+        const match = value.match(/^(\d+)\s*\/\s*(\d+)$/);
+        if (match) {
+          const SBP = match[1];
+          const DBP = match[2];
+          return [
+            { label: "SBP", value: SBP },
+            { label: "DBP", value: DBP }
+          ];
+        } else {
+          alert("혈압은 '120/80' 형식으로 입력해주세요.");
+          throw new Error("Invalid blood pressure format");
+        }
+      } else {
+        return [{ label, value }];
+      }
+    }).flat(); 
+    
+        // MongoDB에 저장
+        const dataToSend = [{
+            date,
+            hospital,
+            entries: processedEntries
+        }];
+
+        // MongoDB 저장 후 list.html로 이동
+        fetch('http://localhost:3000/api/import-data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dataToSend)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                // localStorage에도 저장 (기존 기능 유지)
+     const existingBatch = JSON.parse(localStorage.getItem("customDataBatch") || "[]");
+                existingBatch.push(dataToSend[0]);
+      localStorage.setItem("customDataBatch", JSON.stringify(existingBatch));
+
+                // list.html로 이동
+      window.location.href = "../list/list.html";
+            } else {
+                alert('데이터 저장 중 오류가 발생했습니다: ' + result.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error saving data:', error);
+            alert('데이터 저장 중 오류가 발생했습니다: ' + error.message);
+        });
+    }
+  </script>
+</body>
+</html>

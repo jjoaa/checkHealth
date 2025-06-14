@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>DICOM 뷰어</title>
+  <script src="../components/inject-header.js"></script>
+
+  <style>
+    #dicomImage {
+      width: 800px;
+      height: 800px;
+      border: 2px solid black;
+      margin-top: 20px;
+    }
+    .toolbar button {
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <body>
+
+
+    <h2>DICOM 파일 업로드</h2>
+    <input type="file" id="fileInput" accept=".dcm" multiple><br>
+  
+          <!-- 🛠 툴바 -->
+   <div class="toolbar">
+    <button id="zoomToolBtn">🔍 확대</button>
+    <button id="wlToolBtn">💡 밝기조절</button>
+    <button id="resetBtn">♻️ 초기화</button>
+  </div>
+
+    <div style="display: flex;">
+      <!-- 중앙 뷰어 -->
+      <div id="dicomImage" style="flex: 3;"></div>
+  
+      <!-- 오른쪽 썸네일 -->
+      <div id="thumbnailList" style="flex: 1; margin-left: 20px; overflow-y: auto; max-height: 800px; border: 1px solid #ccc; padding: 10px;">
+        <!-- <div id="thumbnailContainer" style="margin-top: 20px;"> -->
+        <h3>📂 미리보기</h3>
+      </div>
+    </div>
+  
+ <!-- 1. Azure SDK 먼저 -->
+<script src="https://cdn.jsdelivr.net/npm/@azure/storage-blob@12.14.0/dist/azure-storage-blob.min.js"></script>
+
+<!-- 2. config -> blob.js: 전역 등록 -->
+<script src="config.js"></script>
+<script src="blob.js"></script>
+
+<!-- 3. cornerstone 관련 -->
+<script src="cornerstone.min.js"></script>
+<script src="dicomParser.min.js"></script>
+<script src="cornerstoneWADOImageLoader.js"></script>
+
+<!-- 4. 마지막에 pacs.js -->
+<script src="pacs.js"></script>
+
+
+</body>
+</html>

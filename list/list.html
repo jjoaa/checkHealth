@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <script src="../components/inject-header.js"></script>
+
+  <title>건강검진 결과</title>
+  <style>
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    th { background-color: #f0f0f0; }
+  </style>
+</head>
+<body>
+
+<h2>건강검진 결과 요약</h2>
+<button onclick="location.href='../input/input.html'">입력하기</button>
+<button onclick="window.triggerFileInput()">파일 추가하기</button>
+<input type="file" id="fileUpload" accept=".xml" style="display:none;">
+
+<table id="result-table" border="1">
+  <thead>
+    <tr></tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<!-- 테이블 아래에 모달 영역 추가 -->
+<div id="chartModal" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%); background:white; border:1px solid #aaa; padding:20px; z-index:1000; box-shadow:0 0 10px rgba(0,0,0,0.3);">
+  <h3 id="chartTitle"></h3>
+  <canvas id="chartCanvas" width="600" height="300"></canvas>
+  <button id="closeChartBtn">닫기</button>
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0/dist/chartjs-plugin-annotation.min.js"></script>
+
+<script type="module" src="list.js"></script>
+
+</body>
+</html>
