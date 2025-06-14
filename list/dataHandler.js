@@ -139,13 +139,6 @@ export async function initUserData() {
             }
         });
 
-        console.log('Data loading completed. Current state:');
-        console.log('dataMap:', dataMap);
-        console.log('allDates:', Array.from(allDates));
-        console.log('userEnteredLabels:', Array.from(userEnteredLabels));
-        console.log('userEnteredCells:', Array.from(userEnteredCells));
-        console.log('hospitalByDate:', hospitalByDate);
-
     } catch (error) {
         console.error('Error initializing user data:', error);
         throw error;
@@ -319,7 +312,7 @@ export async function deleteHospitalOnly(date) {
     }
 }
 
-//혈압그래프......
+//혈압그래프
 export async function getAllDataMap() {
     try {
         return await getCustomData();
