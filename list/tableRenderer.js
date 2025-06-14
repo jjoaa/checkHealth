@@ -6,12 +6,10 @@ import {
   userEnteredCells, 
   updateLocalStorage, 
   removeFromLocalStorage, 
-  hospitalByDate, // ✅ 이거 추가!
-  saveHospitalOnly, // ✅ 병원명 저장 함수도 사용하니까 같이!
-  deleteHospitalOnly // ✅ 병원명 삭제 함수도 사용하니까 같이!
+  hospitalByDate, 
+  saveHospitalOnly, 
+  deleteHospitalOnly 
 } from './dataHandler.js';
-
-
 
 export function renderTable() {
 
@@ -23,7 +21,7 @@ export function renderTable() {
     "요검사": ["요단백"],
     "혈액검사": [
       "혈색소", "공복혈당", "총콜레스테롤", "HDL 콜레스테롤", "트리글리세라이드",
-      "LDL콜레스테롤", "혈청크레아티닌", "신사구체여과율(GFR)", "AST(SGOT)", "ALT(SGPT)", "감마지티피"
+      "LDL 콜레스테롤", "혈청크레아티닌", "신사구체여과율(GFR)", "AST(SGOT)", "ALT(SGPT)", "감마지티피(γ-GTP)", "비타민 D"
     ]
   };
 
@@ -39,9 +37,9 @@ export function renderTable() {
       "공복혈당": v => v < 70 || v > 99,
       "총콜레스테롤": v => v >= 200,
       "HDL 콜레스테롤": v => v < 40,
-      "LDL콜레스테롤": v => v >= 130,
+      "LDL 콜레스테롤": v => v >= 130,
       "혈색소": v => v < 13 || v > 17,
-      "감마지티피": v => v > 63
+      "감마지티피(γ-GTP)": v => v > 63
     };
     const check = ranges[label];
     return check ? check(num) : false;
@@ -232,4 +230,3 @@ thead.appendChild(hospitalRow);
     });
   });
 }
-
