@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>건강검진 대시보드</title>
+   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js"></script>
+  <link rel ="stylesheet" href="./index.css">
+</head>
+<body>
+
+    <h1>🩺 오늘도 건강중 </h1>
+
+    <div class="grid">
+      <div class="card" onclick="location.href='list/list.html'">
+        <!-- <img src="icons/table.png" alt="list"> -->
+        <h2>결과 목록 보기</h2>
+        <p>전체 건강검진 결과를 표로 확인</p>
+      </div>
+  
+      <div class="card" onclick="location.href='input/input.html'">
+        <!-- <img src="icons/edit.png" alt="input"> -->
+        <h2>결과 입력</h2>
+        <p>직접 건강검진 항목을 입력</p>
+      </div>
+  
+      <div class="card" onclick="location.href='viewer/viewer.html'">
+        <!-- <img src="icons/file.png" alt="pdf viewer"> -->
+        <h2>JPG / PDF 보기</h2>
+        <p>건강검진 PDF/JPG 문서 확인</p>
+      </div>
+  
+      <div class="card" onclick="location.href='viewer/pacs.html'">
+        <!-- <img src="icons/dicom.png" alt="dicom"> -->
+        <h2>영상 뷰어</h2>
+        <p>CT, MRI 등의 영상 확인</p>
+      </div>
+    </div>
+  
+   
+     <div class="main-container">
+        <div class="left-section">
+            <div id="calendar"></div>
+        </div>
+    
+        <div class="dashboard">
+          <div class="login-container">
+            <button id="login-btn">Google 로그인</button>  
+          </div>
+        
+          <div class="circle steps">
+            <div>걸음 수</div>
+            <div id="stepCount">-</div>
+          </div>
+          <div class="circle heart">
+            <div>심박수</div>
+            <div id="heartRate">-</div>
+          </div>
+          <div class="circle calories">
+            <div>칼로리</div>
+            <div id="calories">-</div>
+          </div>
+          <div class="circle bloodGlucose">
+            <div>당뇨</div>
+            <div id="bloodGlucose">-</div>
+          </div>
+        </div>
+
+  <!-- FullCalendar Script -->
+
+  <script src="index/calendar.js"></script>
+  <script src="index/wearable.js"></script>
+</body>
+</html>
