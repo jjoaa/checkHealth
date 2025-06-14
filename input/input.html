@@ -23,27 +23,28 @@
       </div>
 
       <datalist id="itemList">
-        <option value="신장" />
-        <option value="체중" />
-        <option value="허리둘레" />
-        <option value="BMI" />
-        <option value="시력(좌)" />
-        <option value="시력(우)" />
-        <option value="청력(좌/우)" />
-        <option value="혈압(최고/최저)" />
-        <option value="요단백" />
-        <option value="혈색소" />
-        <option value="공복혈당" />
-        <option value="총콜레스테롤" />
-        <option value="HDL 콜레스테롤" />
-        <option value="트리글리세라이드" />
-        <option value="LDL콜레스테롤" />
-        <option value="혈청크레아티닌" />
-        <option value="신사구체여과율(GFR)" />
-        <option value="AST(SGOT)" />
-        <option value="ALT(SGPT)" />
-        <option value="감마지티피" />
-        <option value="기타" />
+        <option value="신장" ></option>
+        <option value="체중" ></option>
+        <option value="허리둘레" ></option>
+        <option value="BMI" ></option>
+        <option value="시력(좌)" ></option>
+        <option value="시력(우)" ></option>
+        <option value="청력(좌/우)" ></option>
+        <option value="혈압(최고/최저)" ></option>
+        <option value="요단백" ></option>
+        <option value="혈색소" ></option>
+        <option value="공복혈당" ></option>
+        <option value="총콜레스테롤" ></option>
+        <option value="HDL 콜레스테롤"></option>
+        <option value="트리글리세라이드" ></option>
+        <option value="LDL콜레스테롤" ></option>
+        <option value="혈청크레아티닌" ></option>
+        <option value="신사구체여과율(GFR)" ></option>
+        <option value="AST(SGOT)" ></option>
+        <option value="ALT(SGPT)" ></option>
+        <option value="감마지티피" ></option>
+        <option value="비타민 D" ></option>
+        <option value="기타"></option>
       </datalist>
 
     <div style="margin-top: 12px;">
@@ -60,6 +61,15 @@
 
   <script>
     const entries = [];
+    
+    document.getElementById("customLabel").addEventListener("change", function () {
+    if (this.value === "기타") {
+      this.value = ""; // 입력 초기화
+      this.placeholder = "직접 항목을 입력하세요 (예: 알부민)";
+    } else {
+      this.placeholder = "항목 선택 또는 직접 입력 (예: 알부민)";
+    }
+  });
 
     function addEntry() {
       const label = document.getElementById("customLabel").value.trim();
@@ -142,7 +152,7 @@
         }];
 
         // MongoDB 저장 후 list.html로 이동
-        fetch('http://localhost:3000/api/import-data', {
+        fetch('http://localhost:3001/api/import-data', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
