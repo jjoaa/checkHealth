@@ -1,7 +1,7 @@
 import pkg from 'mongodb';
 const { MongoClient } = pkg;
 
-const url = 'mongodb+srv://jjoaa7:12rladusdk@cluster0.vbwhbug.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+const url = 'mongodb+srv://jjoaa7:@cluster0.vbwhbug.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 const dbName = 'healthData';
 
 let client = null;
