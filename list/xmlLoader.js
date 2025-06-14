@@ -4,12 +4,10 @@ export const dataMap = {};
 export const allDates = new Set();
 export const bloodPressureMap = {};  // SBP + DBP → 혈압(최고/최저) 으로 통합
 
+const API_BASE_URL = '/api';
+
 export async function loadXmlAndProcess(renderTable) {
   try {
-    //const xmlUrl = './mom.xml';
-   // const res = await fetch(xmlUrl);
-   // const xmlStr = await res.text();
-    //processXML(xmlStr, renderTable);
   } catch (err) {
     console.warn("기본 mom.xml 파일 없음 또는 오류:", err);
   }
@@ -114,7 +112,7 @@ async function processXML(xmlStr, renderTable) {
     try {
       // API를 통해 데이터 저장
       console.log('Sending data to server...');
-      const response = await fetch('http://localhost:3000/api/xml-data', {
+      const response = await fetch(`${API_BASE_URL}/xml-data`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
