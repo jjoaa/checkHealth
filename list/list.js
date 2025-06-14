@@ -88,4 +88,3 @@ window.handleFileUpload = async function(event) {
 
 // 파일 업로드 이벤트 리스너 등록
 document.getElementById('fileUpload').addEventListener('change', window.handleFileUpload);
-
