@@ -19,7 +19,6 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT;
 
-
 // Middleware
 app.use(cors());  // 브라우저의 CORS 요청 허용
 app.use(express.json());  // JSON 요청 처리
@@ -40,6 +39,9 @@ app.get('/api/custom-data', async (req, res) => {
 app.post('/api/custom-data', async (req, res) => {
     try {
         const data = req.body;
+        if (!data.date || !data.entries) {
+            return res.status(400).json({ error: '날짜와 데이터 항목이 필요합니다.' });
+        }
         await updateCustomData(data);
         res.json({ success: true, message: '데이터가 성공적으로 저장되었습니다.' });
     } catch (error) {
@@ -134,7 +136,12 @@ app.post('/api/xml-data', async (req, res) => {
             }));
 
             // XML 소스로 저장 (병원 정보는 null로 시작)
-            await updateCustomData(date, null, customEntries, 'xml');
+            await updateCustomData({
+                date,
+                hospital: null,
+                entries: customEntries,
+                source: 'xml'
+            });
         }
         console.log('XML data saved successfully to customData collection');       
         res.json({ success: true, message: 'XML data saved successfully to customData' });
@@ -180,7 +187,11 @@ app.post('/api/update-hospital', async (req, res) => {
                 });
             }
 
-            await updateCustomData(date, hospital, existingData.entries || []);
+            await updateCustomData({
+                date,
+                hospital,
+                entries: existingData.entries || []
+            });
             res.json({ 
                 success: true, 
                 message: '병원 정보가 성공적으로 업데이트되었습니다.' 
