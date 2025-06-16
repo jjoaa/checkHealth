@@ -129,6 +129,7 @@ export async function initUserData() {
                 if (source !== 'xml') {
                     userEnteredLabels.add(label);
                     userEnteredCells.add(`${label}||${date}`);
+                    userEnteredCells.add(`dummy||${date}`);
                 }
             });
 
@@ -172,6 +173,8 @@ export async function removeFromLocalStorage(label, date) {
         }
 
         await initUserData();  // 데이터 새로고침
+        // 테이블 다시 렌더링
+        renderTable();
     } catch (error) {
         console.error('Error removing data:', error);
         alert(error.message);  // 사용자에게 에러 메시지 표시
@@ -190,45 +193,40 @@ export async function updateLocalStorage(label, date, newValue) {
             throw new Error('XML 데이터는 수정하거나 삭제할 수 없습니다.');
         }
 
-        const allCustom = await getCustomData();
-        let entry = allCustom.find(e => e.date === date);
-        
-        if (!entry) {
-            entry = { date, entries: [] };
-            allCustom.push(entry);
-        }
+        // 기존 데이터가 있는 경우 업데이트
+        if (existingData) {
+            const updatedEntries = existingData.entries.map(entry => {
+                if (entry.label === label) {
+                    return { ...entry, value: newValue };
+                }
+                return entry;
+            });
 
-        if (label === "혈압(최고/최저)") {
-            const match = newValue.match(/^(\d+)\s*\/\s*(\d+)$/);
-            if (match) {
-                const SBP = match[1];
-                const DBP = match[2];
-                
-                // Update or add SBP and DBP entries
-                const sbpEntry = entry.entries.find(e => e.label === "SBP");
-                const dbpEntry = entry.entries.find(e => e.label === "DBP");
+            const updatedData = {
+                date: date,
+                entries: updatedEntries,
+                hospital: existingData.hospital || ''
+            };
 
-                if (sbpEntry) sbpEntry.value = SBP;
-                else entry.entries.push({ label: "SBP", value: SBP });
-
-                if (dbpEntry) dbpEntry.value = DBP;
-                else entry.entries.push({ label: "DBP", value: DBP });
-            }
+            await updateCustomData(updatedData);
         } else {
-            const target = entry.entries.find(e => e.label === label);
-            if (target) {
-                target.value = newValue;
-            } else {
-                entry.entries.push({ label, value: newValue });
-            }
+            // 새로운 데이터 생성
+            const newData = {
+                date: date,
+                entries: [{ label: label, value: newValue }],
+                hospital: ''
+            };
+
+            await updateCustomData(newData);
         }
 
-        await updateCustomData(date, entry.hospital, entry.entries);
-        await mergeBloodPressure(allCustom);
-        await initUserData();  // 데이터 새로고침
+        // 데이터 새로고침
+        await initUserData();
+        // 테이블 다시 렌더링
+        renderTable();
     } catch (error) {
         console.error('Error updating data:', error);
-        alert(error.message);  // 사용자에게 에러 메시지 표시
+        throw error;
     }
 }
 
@@ -274,7 +272,7 @@ export async function initHospitalOnlyData() {
     }
 }
 
-//병원명 저장 (XML용)
+//병원명 저장
 export async function saveHospitalOnly(date, hospitalName) {
     try {
         // 새로운 API 엔드포인트 사용
@@ -302,7 +300,7 @@ export async function saveHospitalOnly(date, hospitalName) {
     }
 }
 
-// 병원명 삭제 (XML용)
+// 삭제
 export async function deleteHospitalOnly(date) {
     try {
         await deleteHospitalData(date);
@@ -312,7 +310,6 @@ export async function deleteHospitalOnly(date) {
     }
 }
 
-//혈압그래프
 export async function getAllDataMap() {
     try {
         return await getCustomData();
