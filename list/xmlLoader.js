@@ -4,7 +4,7 @@ export const dataMap = {};
 export const allDates = new Set();
 export const bloodPressureMap = {};  // SBP + DBP → 혈압(최고/최저) 으로 통합
 
-const API_BASE_URL = '/api';
+const API_BASE_URL = 'http://localhost:3001/api';
 
 export async function loadXmlAndProcess(renderTable) {
   try {
@@ -35,7 +35,7 @@ export function mergeBloodPressure(optionalCustom = null) {
       }
     }
 
-    return;  // 여기서 바로 끝내므로, 나머지 코드 실행하지 않음
+    return; 
   }
 
   // 사용자 입력 기반 병합
