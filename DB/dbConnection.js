@@ -3,8 +3,8 @@ import dotenv from 'dotenv';
 
 dotenv.config(); // .env 파일 로드
 const { MongoClient } = pkg;
-const uri = process.env.MONGODB_URI; 
-const dbName = process.env.MONGODB_DBNAME || 'healthData';
+const uri = process.env.MONGODB_URI; // ✅ 이 값이 .env에서 읽힘
+const dbName = process.env.MONGODB_DBNAME || 'healthData'; // 선택적
 
 let client = null;
 let db = null;
@@ -13,7 +13,7 @@ async function connectDB() {
     if (client) return db;
 
     try {
-        client = await MongoClient.connect(uri); 
+        client = await MongoClient.connect(uri); // ✅ 수정됨
         console.log('MongoDB connection successful');
         db = client.db(dbName);
         return db;
@@ -39,9 +39,11 @@ async function getCustomData() {
     return result;
 }
 
-async function updateCustomData(date, hospital, entries, source = 'manual') {
+async function updateCustomData(data) {
     const db = await connectDB();
     const collection = db.collection('customData');
+    
+    const { date, hospital, entries, source = 'manual' } = data;
     
     // 기존 데이터 확인
     const existingData = await collection.findOne({ date });
