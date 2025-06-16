@@ -31,32 +31,42 @@
 ```
 checkHealth/
 |
-|ㅡ index.html         # 메인 페이지
-|ㅡ index /      
-|  |ㅡ calendar.js     # 캘린더 JS
-|  |ㅡ wearable.js     # 웨어러블 JS
-|  |ㅡ index.css
-|ㅡ list /  결과 보기 + 그래프    
-|  |ㅡ list.html       
-|  |ㅡ list.js          # list 전체 흐름 정리
-|  |ㅡ dataHandler.js   # 데이터 관리 JS
-|  |ㅡ xmlLoader.js     # XML 데이터 JS
-|  |ㅡ tableRenderer.js # 결과 테이블 JS
-|  |ㅡ chart.js         # 그래프 JS
-|ㅡ input /  검사 항목 입력     
-|  |ㅡ input.html   
-|  |ㅡ input.css
-|ㅡ viewer /  뷰어 (PDF/JPG, PACS)     
-|  |ㅡ viewer.html      # JPG / PDF html   
-|  |ㅡ viewer.js        # JPG / PDF 보기  JS
-|  |ㅡ pacs.html        # 영상보기 html
-|  |ㅡ pacs.js          # 영상보기 JS
-|  |ㅡ cornerstoneWADOImageLoader.js   # DICOM 라이브러리 
-|  |ㅡ cornerstone.min.js              # DICOM 라이브러리
-|  |ㅡ dicomParser.min.js              # DICOM 라이브러리    
-├── components/
-|  |ㅡ header.html        # 헤더 html   
-|  |ㅡ inject-header.js   # 헤더 JS
+├── DB/                      # 백엔드 서버 및 데이터베이스 관련 파일
+│   ├── server.js           # Express 서버 설정 및 API 엔드포인트
+│   ├── dbConnection.js     # MongoDB 연결 및 데이터베이스 작업
+│
+├── list/                    # 건강 데이터 리스트 관련 파일
+│   ├── list.html          # 건강 데이터 리스트 페이지
+│   ├── list.js            # 리스트 페이지 메인 스크립트
+│   ├── dataHandler.js     # 데이터 처리 및 API 통신
+│   ├── tableRenderer.js   # 테이블 렌더링 로직
+│   ├── xmlLoader.js       # XML 파일 처리
+│   ├── chart.js           # 차트 관련 기능
+│   └── bpchart.js         # 혈압 차트 관련 기능
+│
+├── viewer/                  # 의료 영상 뷰어 관련 파일
+│   ├── viewer.html        # 의료 영상 뷰어 페이지
+│   ├── pacs.html          # PACS 뷰어 페이지
+│   ├── viewer.js          # 뷰어 메인 스크립트
+│   ├── pacs.js            # PACS 관련 기능
+│   ├── cornerstoneWADOImageLoader.js   # DICOM 라이브러리 
+│   ├── cornerstone.min.js              # DICOM 라이브러리
+│   └── dicomParser.min.js              # DICOM 라이브러리    
+│
+├── components/              # 공통 컴포넌트
+│   ├── header.html        # 헤더 컴포넌트
+│   └── inject-header.js   # 헤더 주입 스크립트
+│
+├── input/                   # 데이터 입력 관련 파일
+│   ├── input.html         # 데이터 입력 페이지
+│   └── input.css          # 입력 페이지 스타일
+│
+├── index/                   # 메인 페이지 관련 파일
+│   └── index.html         # 메인 페이지
+│
+├── index.html              # 루트 페이지
+├── index.css               # 전역 스타일
+└── package.json            # 프로젝트 의존성 및 설정
 └── README.md             # GitHub 설명 파일
 ```
 <br /><br /><br />
